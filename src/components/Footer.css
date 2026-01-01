@@ -1,0 +1,23 @@
+.footer {
+  border-top: 1px solid #e2e8f0;
+  padding: 2rem 0;
+  margin-top: 4rem;
+  /*background-color: #fafbfc; /* Off-white with blue hint */
+  background: linear-gradient(135deg, #DA291C 0%, #FFC72C 100%);
+}
+
+.footer-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.footer-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+
+
