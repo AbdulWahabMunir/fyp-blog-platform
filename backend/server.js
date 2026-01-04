@@ -19,7 +19,10 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 // Middleware
-app.use(cors()) // Allow frontend to make requests
+app.use(cors({
+  origin: 'https://fyp-blog-platform-4xepl02u7.vercel.app', // your Vercel frontend URL
+  credentials: true // needed if sending cookies or auth headers
+}));
 // Increase body size limit to handle base64 images (50MB limit)
 app.use(express.json({ limit: '50mb' })) // Parse JSON request bodies
 app.use(express.urlencoded({ extended: true, limit: '50mb' })) // Parse URL-encoded bodies
