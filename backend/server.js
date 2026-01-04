@@ -25,7 +25,7 @@ app.use(express.json({ limit: '50mb' })) // Parse JSON request bodies
 app.use(express.urlencoded({ extended: true, limit: '50mb' })) // Parse URL-encoded bodies
 
 // MongoDB Atlas Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://your-connection-string'
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://abdulwahabmnr_db_user:wahab796@cluster0.tn5i0fp.mongodb.net/fyp_blog_platform?retryWrites=true&w=majority'
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
