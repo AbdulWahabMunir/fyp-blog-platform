@@ -16,29 +16,44 @@ import blogRoutes from './routes/blogRoutes.js'
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5001
 
 // Middleware
+// CORS configuration - allows frontend to make requests
+const allowedOrigins = [
+  'http://localhost:5173', // Vite dev server
+  'http://localhost:3000', // Alternative dev port
+  process.env.FRONTEND_URL // Production frontend URL
+].filter(Boolean) // Remove undefined values
+
 app.use(cors({
-  origin: [
-    'https://fyp-blog-platform-5l12r42y4.vercel.app',
-    'http://localhost:5173'
-  ],
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? allowedOrigins 
+    : true, // Allow all in development
   credentials: true
-}));
+}))
 // Increase body size limit to handle base64 images (50MB limit)
 app.use(express.json({ limit: '50mb' })) // Parse JSON request bodies
 app.use(express.urlencoded({ extended: true, limit: '50mb' })) // Parse URL-encoded bodies
 
 // MongoDB Atlas Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://abdulwahabmnr_db_user:wahab796@cluster0.tn5i0fp.mongodb.net/fyp_blog_platform?retryWrites=true&w=majority'
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://your-connection-string'
 
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+// Validate MONGODB_URI before connecting
+if (!MONGODB_URI || MONGODB_URI === 'mongodb+srv://your-connection-string') {
+  console.error('❌ MONGODB_URI is not set or is using placeholder value!')
+  console.error('Please set MONGODB_URI environment variable in Railway.')
+  process.exit(1)
+}
+
+if (!MONGODB_URI.startsWith('mongodb://') && !MONGODB_URI.startsWith('mongodb+srv://')) {
+  console.error('❌ Invalid MONGODB_URI format!')
+  console.error('Connection string must start with "mongodb://" or "mongodb+srv://"')
+  console.error('Current value (first 20 chars):', MONGODB_URI.substring(0, 20))
+  process.exit(1)
+}
+
+mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('✅ Connected to MongoDB Atlas')
   })
@@ -73,9 +88,7 @@ app.use((err, req, res, next) => {
 })
 
 // Start server
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`)
+  console.log(`📝 API available at http://localhost:${PORT}`)
 })
-
-
-
